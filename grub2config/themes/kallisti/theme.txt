@@ -1,0 +1,94 @@
+# Default theme for GRUB2
+#
+# Copyright (C) 2011 Daniel Tschudi
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+#general settings
+message-font: "pixelade 12"
+message-color: "#000"
+message-bg-color: "#fff"
+terminal-box: "terminal_box_*.png"
+terminal-font: "pixelade 14"
+desktop-image: "kallisti.png"
+
+#help bar at the bottom
++ label {
+	top = 720
+	left = 470
+	width = 450
+	height = 15
+	text = "@KEYMAP_MIDDLE@"
+	align = "center"
+	font = "pixelade 10"
+	color = "#FFF"
+}
+
+#boot menu
++ boot_menu {
+	left = 400
+	top = 550
+	height = 100
+	width = 400
+	item_font = "pixelade 12"
+	item_color = "#999"
+	selected_item_color= "#FFF"
+#	selected_item_pixmap_style = "blob_*.png"
+#	icon_height = 25
+#	icon_width = 25
+	item_height = 16
+	item_padding = 0
+#	item_icon_space = 0
+#	item_spacing = 1
+#	scrollbar = true
+#	scrollbar_width = 20
+#	scrollbar_thumb = "slider_*.png"
+#	menu_pixmap_style = "boot_menu_*.png"
+}
+
+#progress bar
+#+ progress_bar {
+#	id = "__timeout__"
+#	left = 470
+#	top = 680
+#	height = 15
+#	width = 450
+#	font = "pixelade 12"
+#	text_color = "#ddd"
+#	fg_color = "#555"
+#	bg_color = "#000"
+#	text = "@TIMEOUT_NOTIFICATION_LONG@"
+#}
+
+
+# Show circular progress
++ circular_progress
+{
+   id = "__timeout__"
+   left = 40
+   top = 150
+   width = 105
+   height = 105
+   num_ticks = 33
+   ticks_disappear = false
+   start_angle = -67
+   end_angle = -67
+   center_bitmap = "archlogo.png"
+   tick_bitmap = "tick.png"
+}
