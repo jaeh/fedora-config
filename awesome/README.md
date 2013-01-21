@@ -1,4 +1,3 @@
-
 awesome_wm_config
 =================
 

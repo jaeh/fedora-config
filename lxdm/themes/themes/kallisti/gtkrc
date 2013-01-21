@@ -1,0 +1,30 @@
+style "back"
+{
+	fg[NORMAL]="#eed604"
+}
+
+style "time"
+{
+	fg[NORMAL]="#eed604"
+	font_name="Sans 12"
+}
+
+style "prompt"
+{
+	fg[NORMAL]="#eed604"
+	font_name="Sans Bold 14"
+}
+
+# Normally this won't paint an invisible event box, but we did some hacks in greeter.c.
+style "bottom"
+{
+	font_name="Sans 12"
+	fg[NORMAL] = "#eed604"
+	bg= "#000000"
+}
+
+widget "lxdm" style "back"
+widget "lxdm.*.time" style "time"
+widget "lxdm.*.prompt" style "prompt"
+widget "lxdm.*.bottom_pane" style "bottom"
+widget_class "GtkWindow.*.GtkEventBox.*.<GtkLabel>" style "bottom"

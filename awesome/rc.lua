@@ -9,8 +9,8 @@ require("naughty")
 
 vicious = require("vicious")
 
-require("functions/run_at_once")
 
+require("functions/run_at_once")
 run_at_once({"lxterminal", "/usr/libexec/lxpolkit"})
 
 require("functions/get_color_for_widgets")
@@ -29,6 +29,8 @@ memwidget = require("widgets/memwidget")
 cpuwidget = require("widgets/cpuwidget")
 
 volumewidget = require("widgets/volumewidget")
+
+showhidewidget = require("widgets/showhidewidget")
 
 spacer = require("widgets/spacer")
 sep = require("widgets/sep")
@@ -67,7 +69,7 @@ beautiful.init(conf_dir .. "/themes/kallisti/theme.lua")
 -- This is used later as the default terminal and editor to run.
 terminal = "lxterminal"
 editor = os.getenv("EDITOR") or "geany"
-editor_cmd = terminal .. " -e " .. editor
+editor_cmd = editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -96,10 +98,14 @@ layouts =
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {}
+tags = {
+	names  = { 1,  		   2, 		   3, 		   4, 		   5, 		   'com'       },
+	layout = { layouts[10], layouts[1], layouts[3], layouts[1], layouts[1], layouts[7] }
+}
+
 for s = 1, screen.count() do
-    -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 'com' }, s, layouts[1])
+	-- Each screen has its own tag table.
+	tags[s] = awful.tag(tags.names, s, tags.layout)
 end
 -- }}}
 
@@ -209,6 +215,7 @@ for s = 1, screen.count() do
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
     -- Add widgets to the wibox - order matters
+    
     mywibox[s].widgets = {
         {
             mylauncher,
@@ -219,13 +226,14 @@ for s = 1, screen.count() do
         mylayoutbox[s],
         mytextclock, spacer, sep, spacer, 
         volumewidget, spacer, sep, spacer, -- volume widget
-		batwidget, spacer, sep, spacer, --Battery widget 
-        wifiwidget, spacer, sep, spacer,  --Wifi widget
-        thermwidget, spacer, sep, spacer, 
-        memwidget, spacer, sep, spacer,
+		batwidget, spacer, sep, spacer,
+        showhidewidget, --Battery widget 
+        wifiwidget,  --Wifi widget
+        thermwidget, 
+        memwidget,
         cpuwidget, spacer, sep, spacer,
         --~ cpuwidget, spacer,
-	
+
 
         
         s == 1 and mysystray or nil,
@@ -422,7 +430,9 @@ awful.rules.rules = {
     { rule = { class = "Skype" },
       properties = { tag = tags[1][6] } },
     { rule = { class = "Pidgin" },
-      properties = { tag = tags[1][6] } }
+      properties = { tag = tags[1][6] } },
+    { rule = { class = "Virt-manager" },
+      properties = { tag = tags[1][3] } }
 }
 -- }}}
 
