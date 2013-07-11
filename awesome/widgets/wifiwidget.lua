@@ -10,7 +10,7 @@ vicious.register(wifiwidget, vicious.widgets.wifi, function(widget, args)
 
 		-- if there is no wlan connected:
 		if args["{ssid}"] == "N/A" then
-			return "no net"
+			return "no net "
 		end
 
 		color = get_color_for_widgets(link, 

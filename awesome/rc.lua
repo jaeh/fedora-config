@@ -9,10 +9,8 @@ require("naughty")
 
 vicious = require("vicious")
 
-
 require("functions/run_at_once")
-run_at_once({"lxterminal", "/usr/libexec/lxpolkit"})
-
+run_at_once({'lxterminal'})
 require("functions/get_color_for_widgets")
 
 --~ all widgets are in widgets.lua in the same folder as is this config
@@ -99,13 +97,13 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-	names  = { 1,  		   2, 		   3, 		   4, 		   5, 		   'com'       },
-	layout = { layouts[10], layouts[1], layouts[3], layouts[1], layouts[1], layouts[7] }
+    names  = { 1,          2,          3,          4,          5,          'com'       },
+    layout = { layouts[1], layouts[1], layouts[3], layouts[1], layouts[1], layouts[7] }
 }
 
 for s = 1, screen.count() do
-	-- Each screen has its own tag table.
-	tags[s] = awful.tag(tags.names, s, tags.layout)
+    -- Each screen has its own tag table.
+    tags[s] = awful.tag(tags.names, s, tags.layout)
 end
 -- }}}
 
@@ -119,11 +117,11 @@ myawesomemenu = {
 }
 
 mydevmenu = {
-	{"geany", "geany"},
-	{"filezilla", "filezilla"},
-	{"launch dev apps", function() 
-		run_at_once( {"geany", "filezilla"} ) 
-	end}
+    {"geany", "geany"},
+    {"filezilla", "filezilla"},
+    {"launch dev apps", function() 
+        run_at_once( {"geany", "filezilla"} ) 
+    end}
 }
 
 fedoramenu = require("fedoramenu")
@@ -224,17 +222,15 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
-        mytextclock, spacer, sep, spacer, 
+        mytextclock, spacer, sep, spacer,
         volumewidget, spacer, sep, spacer, -- volume widget
-		batwidget, spacer, sep, spacer,
-        showhidewidget, --Battery widget 
+        batwidget, spacer, sep, spacer,
+        showhidewidget, spacer, sep, spacer, --Battery widget 
         wifiwidget,  --Wifi widget
         thermwidget, 
         memwidget,
         cpuwidget, spacer, sep, spacer,
         --~ cpuwidget, spacer,
-
-
         
         s == 1 and mysystray or nil,
         mytasklist[s],
@@ -309,36 +305,36 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
-	awful.key({ }, "XF86AudioRaiseVolume",
-		function ()
-			-- The client currently has the input focus, so it cannot be
-			-- minimized, since minimized clients can't have the focus.
-			vicious.force({volumewidget}) 
-			awful.util.spawn_with_shell( "amixer -q sset Master 10%+")
-		end),
-	awful.key({ }, "XF86AudioLowerVolume",
-		function ()
-			-- The client currently has the input focus, so it cannot be
-			-- minimized, since minimized  can't have the focus.
-			vicious.force({volumewidget}) 
-			awful.util.spawn_with_shell( "amixer -q sset Master 10%-")
-		end),
-	awful.key({modkey, "Shift" }, "s", function() 
-		awful.util.spawn_with_shell('dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend')
-	end),
-	awful.key({ modkey, "Shift" }, "d",
-		function ()
-			-- The client currently has the input focus, so it cannot be
-			-- minimized, since minimized clients can't have the focus.
-			naughty.notify({text="bla"})
-			run_at_once({"geany", "filezilla"})
-		end),
-	awful.key({ modkey, "Shift" }, "f",
-		function ()
-			-- The client currently has the input focus, so it cannot be
-			-- minimized, since minimized clients can't have the focus.
-			run_at_once({"pidgin","skype"})
-		end)
+    awful.key({ }, "XF86AudioRaiseVolume",
+        function ()
+            vicious.force({volumewidget}) 
+            awful.util.spawn_with_shell( "amixer -q sset Master 10%+")
+        end),
+    awful.key({ }, "XF86AudioLowerVolume",
+        function ()
+            vicious.force({volumewidget}) 
+            awful.util.spawn_with_shell( "amixer -q sset Master 10%-")
+        end),
+    awful.key({modkey, "Shift" }, "s", function() 
+        awful.util.spawn_with_shell('dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend')
+    end),
+    awful.key({ modkey, "Shift" }, "d",
+        function ()
+            naughty.notify({text="bla"})
+            run_at_once({"geany", "filezilla"})
+        end),
+    awful.key({ modkey, "Shift" }, "f",
+        function ()
+            run_at_once({"pidgin","skype"})
+        end),
+    awful.key({modkey, "Shift"}, "Down",
+        function ()
+            awful.util.spawn_with_shell("xbacklight -dec 10%");
+        end),
+    awful.key({modkey, "Shift"}, "Up",
+        function ()
+            awful.util.spawn_with_shell("xbacklight -inc 10%");
+        end)
 )
 
 clientkeys = awful.util.table.join(
@@ -432,7 +428,9 @@ awful.rules.rules = {
     { rule = { class = "Pidgin" },
       properties = { tag = tags[1][6] } },
     { rule = { class = "Virt-manager" },
-      properties = { tag = tags[1][3] } }
+      properties = { tag = tags[1][3] } },
+    { rule = { class = "Transmission" },
+      properties = { tag = tags[1][5] } }
 }
 -- }}}
 
