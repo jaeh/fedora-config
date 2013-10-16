@@ -1,21 +1,20 @@
 --~ memory widget, shows percentage of total memory thats being used atm
-local ipairs = ipairs
+local wibox = require('wibox')
+local vicious = require('vicious')
 
-memwidget = widget({ type = "textbox" })
+memwidget = wibox.widget.textbox()
 
-vicious.register(memwidget, vicious.widgets.mem, 
-	function (widget, args)
-		
-		if vicious.showhide == true then
-			bla = ""
-			for i,v in ipairs(args) do 
-				if i == 1 then
-					bla = v 
-				end
-			end
-			
-			return 'mem: ' .. bla .. '% '
-		end
-	end, 3)
+vicious.register(memwidget, vicious.widgets.mem, function(widget,args)
+  local value = ""
+
+  if vicious.showhide == true then
+    for i,v in ipairs(args) do 
+      if i == 1 then
+        value = 'mem: ' .. v .. '% '
+      end
+    end
+  end
+  return value
+end, 5)
 
 return memwidget
