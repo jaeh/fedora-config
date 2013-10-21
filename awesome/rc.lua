@@ -1,3 +1,8 @@
+-- todo:
+-- repair wifi widget
+-- yum install xbacklight pidgin
+-- 
+
 local numOfScreens = 6
 
 -- Standard awesome library
@@ -27,6 +32,7 @@ local showhidewidget = require("widgets/showhidewidget")
 
 local run_at_once = require("functions/run_at_once")
 
+local fedoramenu = require("fedoramenu")
 
 local spacer = require("widgets/spacer")
 -- spacer that can show and hide
@@ -62,12 +68,12 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/home/m/.config/awesome/themes/kallisti/theme.lua")
+beautiful.init(awful.util.getdir('config') .. "/themes/kallisti/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "lxterminal"
 editor = os.getenv("EDITOR") or "geany" or "vi"
-editor_cmd = terminal .. " -e " .. editor
+editor_cmd = editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -120,10 +126,12 @@ myawesomemenu = {
    { "quit", awesome.quit }
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+mymainmenu = awful.menu({ items = { 
+	{ "awesome", myawesomemenu, beautiful.awesome_icon },
+    { "fedora", fedoramenu },
+	{ "open terminal", terminal }
+  }
+})
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -202,7 +210,6 @@ for s = 1, screen.count() do
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
     mywibox[s] = awful.wibox({ position = "top", screen = s })
 
     -- Widgets that are aligned to the left
@@ -338,23 +345,27 @@ globalkeys = awful.util.table.join(
               end),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end),
+    awful.key({ }, "XF86AudioMute",
+        function ()
+            volumewidget:toggle_mute()
+            os.execute("sleep 0.01")
+            vicious.force({volumewidget}) 
+        end),
     awful.key({ }, "XF86AudioRaiseVolume",
         function ()
+            awful.util.spawn( "amixer -q sset Master 10%+ unmute")
+            os.execute("sleep 0.01")
             vicious.force({volumewidget}) 
-            awful.util.spawn_with_shell( "amixer -q sset Master 10%+")
         end),
     awful.key({ }, "XF86AudioLowerVolume",
         function ()
+            awful.util.spawn( "amixer -q sset Master 10%- unmute")
+            os.execute("sleep 0.01")
             vicious.force({volumewidget}) 
-            awful.util.spawn_with_shell( "amixer -q sset Master 10%-")
         end),
-    awful.key({modkey, "Shift" }, "s", function() 
-        awful.util.spawn_with_shell('dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend')
-    end),
     awful.key({ modkey, "Shift" }, "d",
         function ()
-            naughty.notify({text="bla"})
-            run_at_once({"geany", "filezilla"})
+            run_at_once({"geany"})
         end),
     awful.key({ modkey, "Shift" }, "f",
         function ()
@@ -445,8 +456,6 @@ awful.rules.rules = {
                      focus = awful.client.focus.filter,
                      keys = clientkeys,
                      buttons = clientbuttons } },
-    { rule = { class = "MPlayer" },
-      properties = { floating = true } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "Gimp" },
@@ -536,3 +545,5 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+awful.util.spawn('lxsession')

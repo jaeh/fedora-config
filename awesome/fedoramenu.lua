@@ -1,5 +1,5 @@
 lookandfeelmenu = {
-	{"pulseaudio", "pulseaudio"},
+	{"pavucontrol", "pavucontrol"},
 	{"system-setup-keyboard"},
 	{"gpointing", "gpointing-device-settings"},
 	{"input method selector", "im-chooser"},

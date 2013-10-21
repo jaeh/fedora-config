@@ -2,6 +2,7 @@ local wibox = require('wibox')
 local vicious = require('vicious')
 local awful = require("awful")
 local naughty = require('naughty')
+local get_color_for_widgets = require("../functions/get_color_for_widgets")
 
 -- Create a wifiwidget
 -- It displays the SSID of the net you are connected to ( args["{ssid}"] ) and the percentage of connectivity ( args["{link}"] )
@@ -13,45 +14,42 @@ vicious.register(wifiwidget, vicious.widgets.wifi, function(widget, args)
   link = args["{link}"]
   ssid = args["{ssid}"]
 
-  --~ 
-  --~ for key,value in pairs(args) do 
-      --~ naughty.notify({ 
-        --~ preset = naughty.config.presets.critical,
-        --~ title = "Battery is running low!",
-        --~ text = 'key = ' .. key .. ' value = ' .. value
-      --~ })
-  --~ end
-
     -- if there is no wifi connected:
-  if args["{ssid}"] == "N/A" then
+  if ssid == "N/A" then
     return "no net"
   end
 
-  color = get_color_for_widgets(link, {
-    {color = "red", limit = 10},
-    {color = "pink", limit = 20},
-    {color = "yellow", limit = 40},
-    {color = "lightgreen", limit = 60},
-    {color = "green", limit = 80}
-  })
+  local color = "white"
 
-  return '<span color="' .. color .. '">' .. args["{ssid}"] .. ' ' .. link .. '%</span>'
+  if link < 10 then
+	color = "red"
+  elseif link < 20 then
+	color = "pink"
+  elseif link < 40 then
+	color = "yellow"
+  elseif link < 60 then
+	color = "lightgreen"
+  elseif link < 80 then
+	color = "green"
+  end
+ 
+  return '<span color="' .. color .. '">' .. ssid .. ' ' .. link .. '%</span>'
 
-end, 1, "wlan1") 
---~ 
---~ 
---~ is_running = false
---~ -- buttons for the wifi widget
---~ wifiwidget:buttons(awful.util.table.join(
-  --~ awful.button({}, 1, function() 
-  --~ if is_running == false then
-    --~ is_running = true
-    --~ run_once("nm-applet")
-  --~ else
-    --~ is_running = false
-    --~ awful.util.spawn_with_shell("killall nm-applet")
-  --~ end
-  --~ end) --Left click to open or close nm-applet
---~ ))
+end, 10, "wlan1") 
+
+local control_open = 0
+
+wifiwidget:buttons(awful.util.table.join(
+	awful.button({ }, 1, 
+	function () 
+		if control_open == 0 then
+			control_open = 1
+			awful.util.spawn("nm-applet")
+		elseif control_open == 1 then
+			control_open = 0
+			awful.util.spawn("killall nm-applet")
+		end
+	end)
+))
 
 return wifiwidget

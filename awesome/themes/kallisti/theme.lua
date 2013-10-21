@@ -3,8 +3,10 @@
 ---------------------------
 
 local theme = {}
+local awful = require('awful')
+local naughty = require('naughty')
 
-local conf_dir = '/home/m/.config/awesome'
+local conf_dir = awful.util.getdir('config')
 
 theme.font          = 'Pixelade 10'
 

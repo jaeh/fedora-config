@@ -17,6 +17,7 @@ local notified = false
 local notifypercent = 12
 local notifypercentstep = 2
 
+
 vicious.register(batwidget, vicious.widgets.bat,
     function(widget, args)
         loadState = args[1]
@@ -42,19 +43,35 @@ vicious.register(batwidget, vicious.widgets.bat,
             notifypercent = 12
         end
         -- battery is being charged:
-        if args[1] == "+" then
-            return '<span color="#00ffff">bat: </span>' .. args[2] .. '%'
+        if loadState == "+" then
+            if loadPercent < 50 then
+				color = "green"
+			else 
+				color = "lightgreen"
+			end
         --battery gets discharged:
-        elseif args[1] == "-" then
-            return '<span color="#ff0000">bat: </span>' .. args[2] .. '%'
-        else
-            if args[2] >= 99 then
-                --battery is full
-                return '<span color="#FFF126">ॐ</span>'
-            end
-            return '<span color="#FFF126">' ..args[1].. args[2] ..'/ ' .. args[3] .. '</span>'
+        elseif loadState == "-" then
+			if loadPercent < 20 then
+				color = "#FF0000"
+			else
+				color = "#FFF123"
+			end
         end
+
+        if loadPercent >= 98 then
+            --battery is full
+            return '<span color="#FFF123">ॐ</span>'
+        end
+        
+        return '<span color="' .. color .. '">bat: </span>' .. loadPercent .. '%'
     end, 
 5, "BAT0")
+
+batwidget:buttons(awful.util.table.join(
+	awful.button({ }, 3, 
+	function ()
+		awful.util.spawn("/usr/bin/systemctl suspend")
+	end)
+))
 
 return batwidget

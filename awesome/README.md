@@ -14,8 +14,6 @@ lxterminal
 
 gimp
 
-
-
 after download:
 
 copy files into ~/.config/awesome/
