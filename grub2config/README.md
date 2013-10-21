@@ -15,20 +15,14 @@ Usage:
  
  get the git repo with my config files:
  
- git clone https://github.com/jaeh/fedora-config.git
- 
- 
- cd ./config_collect/
- 
- su -c 'cp -r ./grub2config/themes/kallisti /boot/grub2/themes/ && cp -r ./grub2config/grub /etc/default/grub'
- 
- su 'grub2-mkconfig -o /boot/grub2/grub.cfg'
- 
+ git clone https://github.com/jaeh/fedora-config.gitgetdir
  
 Remarks:
  This theme does not contain any important text in a fixed language,
  to change the text above the picture just change the image.
 
+ It also needs a lot of tinkering to get it to run, since lots of the settings are unique to each system.
+ I will see if i can find a way to get this more portable :(
 
 TODO: 
  
