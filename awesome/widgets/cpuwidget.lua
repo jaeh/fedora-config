@@ -4,23 +4,29 @@
 -- The vicious.widgets.cpu return three variables, $1 is the percentage total usage.
 -- $2 is the percentage of the first CPU usage, and $3 is the percentage of the second CPU usage.
 -- I just use the first one, you can put all you want.
+
 local wibox = require("wibox")
 local vicious = require("vicious")
-local ipairs = ipairs
+local naughty = require('naughty')
+local beautiful = require('beautiful')
 
 -- Initialize widget
 cpuwidget = wibox.widget.textbox()
 -- Register widget
 vicious.register(cpuwidget, vicious.widgets.cpu, function(widget,args)
+  local total_load = args[5]
   local value = ""
-
+  local color = beautiful.widgetcolors.white
+ 
   if vicious.showhide == true then
-    for i,v in ipairs(args) do 
-      if i == 5 then
-        value = 'cpu: ' .. v .. '%'
-      end
-    end
+    if total_load > 70 then
+		color = beautiful.widgetcolors.red
+    elseif total_load > 40 then
+		color = beautiful.widgetcolors.yellow
+	end
+    value = '<span color="' .. color .. '">cpu:</span> ' .. total_load .. '%'
   end
+ 
   return value
 end, 3)
 

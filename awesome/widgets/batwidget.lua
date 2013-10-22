@@ -2,6 +2,7 @@ local wibox = require('wibox')
 local vicious = require('vicious')
 local awful = require('awful')
 local naughty = require('naughty')
+local beautiful = require('beautiful')
 
 -- Create a batwidget (status chrg%)
 
@@ -22,11 +23,18 @@ vicious.register(batwidget, vicious.widgets.bat,
     function(widget, args)
         loadState = args[1]
         loadPercent = args[2]
+        
+        if loadPercent >= 98 then
+            --battery is full
+            return '<span color="' .. beautiful.widgetcolors.yellow .. '">ॐ</span>'
+        end
+        
+        
         -- battery is almost empty
         if loadState == '-' then
 
             if loadPercent <= 3 then
-                awful.util.spawn_with_shell('dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend')
+				suspend()
             
             elseif loadPercent <= notifypercent then
                 np = notifypercent - notifypercentstep
@@ -35,34 +43,30 @@ vicious.register(batwidget, vicious.widgets.bat,
 
                     naughty.notify({ preset = naughty.config.presets.critical,
                                      title = "Battery is running low!",
-                                     text = '',
+                                     text = 'Remaining: ' .. loadPercent,
                                      timeout = 10})
                 end
             end
         elseif loadState == '+' then
             notifypercent = 12
-        end
+        end		
+
         -- battery is being charged:
         if loadState == "+" then
             if loadPercent < 50 then
-				color = "green"
+				color = beautiful.widgetcolors.green
 			else 
-				color = "lightgreen"
+				color = beautiful.widgetcolors.lightgreen
 			end
         --battery gets discharged:
         elseif loadState == "-" then
 			if loadPercent < 20 then
-				color = "#FF0000"
+				color = beautiful.widgetcolors.red
 			else
-				color = "#FFF123"
+				color = beautiful.widgetcolors.yellow
 			end
         end
 
-        if loadPercent >= 98 then
-            --battery is full
-            return '<span color="#FFF123">ॐ</span>'
-        end
-        
         return '<span color="' .. color .. '">bat: </span>' .. loadPercent .. '%'
     end, 
 5, "BAT0")
@@ -70,8 +74,12 @@ vicious.register(batwidget, vicious.widgets.bat,
 batwidget:buttons(awful.util.table.join(
 	awful.button({ }, 3, 
 	function ()
-		awful.util.spawn("/usr/bin/systemctl suspend")
+		suspend()
 	end)
 ))
+
+function suspend ()
+  awful.util.spawn("/usr/bin/systemctl suspend")
+end
 
 return batwidget

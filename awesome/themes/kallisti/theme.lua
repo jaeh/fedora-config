@@ -25,6 +25,15 @@ theme.border_normal = '#000000'
 theme.border_focus  = '#535d6c'
 theme.border_marked = '#91231c'
 
+theme.widgetcolors = {}
+
+theme.widgetcolors.white = "#AAAAAA"
+theme.widgetcolors.lightgreen = "lightgreen"
+theme.widgetcolors.green = "green"
+theme.widgetcolors.yellow = "#FFF123"
+theme.widgetcolors.red = "red"
+
+
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:

@@ -15,10 +15,10 @@ vicious.register(volumewidget, vicious.widgets.volume, function(widget, args)
 
 	awful.util.spawn_with_shell("echo " .. args[2] .. " > /home/j/test.txt")
 	
-	if args[2] == "♫" then
+	if args[2] == "♫" and args[1] > 0 then
 		return args[1] .. args[2]
 	else
-		return  '--' .. args[2]
+		return  '-- ' .. args[2]
 	end
 end, 3, "Master")
 

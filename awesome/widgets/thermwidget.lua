@@ -5,19 +5,21 @@ local ipairs = ipairs
 --Init    
 local thermwidget = wibox.widget.textbox()
 local naughty = require("naughty")
+local beautiful = require("beautiful")
 
 vicious.register(thermwidget, vicious.widgets.thermal,
   function (widget, args)
-    local value = ""
+    local value = ''
 
     if vicious.showhide == true then
+	  local color = beautiful.widgetcolors.white
+	  if args[1] > 90 then
+		color = beautiful.widgetcolors.red
+	  elseif args[1] > 75 then
+		color = beautiful.widgetcolors.yellow
+	  end
 
-      for i,v in ipairs(args) do 
-        value = i
-        if i == 1 then
-          value = v .. 'C'
-        end
-      end
+      value = args[1] .. '<span color="' .. color .. '">' .. 'C</span>'
     end
 
     return value

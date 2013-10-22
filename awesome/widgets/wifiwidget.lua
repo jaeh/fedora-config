@@ -2,7 +2,7 @@ local wibox = require('wibox')
 local vicious = require('vicious')
 local awful = require("awful")
 local naughty = require('naughty')
-local get_color_for_widgets = require("../functions/get_color_for_widgets")
+local beautiful = require('beautiful')
 
 -- Create a wifiwidget
 -- It displays the SSID of the net you are connected to ( args["{ssid}"] ) and the percentage of connectivity ( args["{link}"] )
@@ -22,15 +22,15 @@ vicious.register(wifiwidget, vicious.widgets.wifi, function(widget, args)
   local color = "white"
 
   if link < 10 then
-	color = "red"
+	color = beautiful.widgetcolors.red
   elseif link < 20 then
 	color = "pink"
   elseif link < 40 then
-	color = "yellow"
+	color = beautiful.widgetcolors.yellow
   elseif link < 60 then
-	color = "lightgreen"
+	color = beautiful.widgetcolors.lightgreen
   elseif link < 80 then
-	color = "green"
+	color = beautiful.widgetcolors.green
   end
  
   return '<span color="' .. color .. '">' .. ssid .. ' ' .. link .. '%</span>'
